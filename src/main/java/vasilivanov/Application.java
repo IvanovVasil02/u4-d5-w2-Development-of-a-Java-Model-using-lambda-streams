@@ -27,11 +27,11 @@ public class Application {
     Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2023");
 
     Supplier<Book> bookSupplier = () -> new Book(f.code().isbn10(),
-            f.book().title(), f.date().between(date1, date2),
+            f.book().title(), convertToLocalDate(f.date().between(date1, date2)),
             getRndm(), f.book().author(), f.book().genre());
 
     Supplier<Magazine> magazineSupplier = () -> new Magazine(f.code().isbn10(),
-            f.book().title(), f.date().between(date1, date2),
+            f.book().title(), convertToLocalDate(f.date().between(date1, date2)),
             getRndm(), randomPeriodicity());
 
     for (int i = 0; i < 2; i++) {
@@ -121,6 +121,8 @@ public class Application {
 //            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 //            System.out.println(content);
             readArchive(file, userArchive);
+
+            userArchive.forEach((isbna, element) -> System.out.println(element));
 
             System.out.println("What do you want to do now");
             choice = Integer.parseInt(scanner.nextLine());

@@ -1,6 +1,6 @@
 package vasilivanov.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Book extends LibraryProduct {
 
@@ -8,7 +8,7 @@ public class Book extends LibraryProduct {
   private String genre;
 
 
-  public Book(String isbnCode, String title, Date pubblicationYear, long pagesNumber, String author, String genre) {
+  public Book(String isbnCode, String title, LocalDate pubblicationYear, long pagesNumber, String author, String genre) {
     super(isbnCode, title, pubblicationYear, pagesNumber);
     this.author = author;
     this.genre = genre;

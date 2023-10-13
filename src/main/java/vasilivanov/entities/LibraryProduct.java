@@ -5,14 +5,14 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.lang.Long.parseLong;
 
 public abstract class LibraryProduct {
   protected String isbnCode;
@@ -20,12 +20,13 @@ public abstract class LibraryProduct {
   protected LocalDate pubblicationYear;
   protected long pagesNumber;
 
-  public LibraryProduct(String isbnCode, String title, Date pubblicationYear, long pagesNumber) {
+  public LibraryProduct(String isbnCode, String title, LocalDate pubblicationYear, long pagesNumber) {
     this.isbnCode = isbnCode;
     this.title = title;
-    this.pubblicationYear = convertToLocalDate(pubblicationYear);
+    this.pubblicationYear = pubblicationYear;
     this.pagesNumber = pagesNumber;
   }
+
 
   public static long getRndm() {
     return Math.round(Math.random() * (400 - 100 + 1) + 100);
@@ -52,14 +53,12 @@ public abstract class LibraryProduct {
   }
 
   public static void getSearchedElementByDate(List<LibraryProduct> catalogue, String userDate) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    LocalDate date = LocalDate.parse(userDate, formatter);
 
     Iterator<LibraryProduct> i = catalogue.iterator();
 
     while (i.hasNext()) {
       LibraryProduct current = i.next();
-      if (current.pubblicationYear.equals(date)) {
+      if (current.pubblicationYear.equals(getStrLocaleDate(userDate))) {
         System.out.println(current);
       }
     }
@@ -86,71 +85,61 @@ public abstract class LibraryProduct {
       LibraryProduct current = i.next();
       if (current instanceof Book) {
 
-        String stringElement =
+        String stringElement = "Book#" +
                 current.isbnCode + "#" +
-                        current.title + "#" +
-                        current.pubblicationYear + "#" +
-                        current.pagesNumber + "#" +
-                        ((Book) current).getAuthor() + "#" +
-                        ((Book) current).getGenre();
+                current.title + "#" +
+                current.pubblicationYear + "#" +
+                current.pagesNumber + "#" +
+                ((Book) current).getAuthor() + "#" +
+                ((Book) current).getGenre();
         FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
       } else {
-        String stringElement =
+        String stringElement = "Magazine#" +
                 current.isbnCode + "#" +
-                        current.title + "#" +
-                        current.pubblicationYear + "#" +
-                        current.pagesNumber + "#" +
-                        ((Magazine) current).getPeriodicity();
+                current.title + "#" +
+                current.pubblicationYear + "#" +
+                current.pagesNumber + "#" +
+                ((Magazine) current).getPeriodicity();
         FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
       }
-
     }
-
   }
 
-  public static void readArchive(File filePage, Map<String, LibraryProduct> archive) throws IOException {
+  public static void readArchive(File filePage, Map<String, LibraryProduct> archive) throws IOException, ParseException {
 
     String readFileTostring = FileUtils.readFileToString(filePage, "UTF-8");
-    String[] splitElement = readFileTostring.split("!");
+    String[] splitFile = readFileTostring.split("!");
+    for (int i = 0; i < splitFile.length; i++) {
+      String[] splitElement = splitFile[i].split("#");
 
-    for (int i = 0; i < splitElement.length; i++) {
-      
+      if (splitElement[1].equals("Book")) {
+        for (int j = 0; j < splitElement.length; j++) {
+          archive.put(splitElement[1], new Book(splitElement[1],
+                  splitElement[2], getStrLocaleDate(splitElement[3]),
+                  parseLong(splitElement[4]), splitElement[5], splitElement[6]));
+        }
+      } else {
+        for (int j = 0; j < splitElement.length; j++) {
+          archive.put(splitElement[1], new Book(splitElement[1],
+                  splitElement[2], getStrLocalDate(splitElement[3]),
+                  parseLong(splitElement[4]), splitElement[5], splitElement[6]));
+        }
+      }
     }
   }
 
-  public String getIsbnCode() {
-    return isbnCode;
+  public static LocalDate getStrLocaleDate(String dateString) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    return LocalDate.parse(dateString, formatter);
   }
 
-  public void setIsbnCode(String isbnCode) {
-    this.isbnCode = isbnCode;
+  public static LocalDate getStrLocalDate(String dateString) throws ParseException {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.ENGLISH);
+    return LocalDate.parse(dateString, formatter);
   }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public LocalDate getPubblicationYear() {
-    return pubblicationYear;
-  }
-
-  public void setPubblicationYear(LocalDate pubblicationYear) {
-    this.pubblicationYear = pubblicationYear;
-  }
-
-  public long getPagesNumber() {
-    return pagesNumber;
-  }
-
-  public void setPagesNumber(long pagesNumber) {
-    this.pagesNumber = pagesNumber;
-  }
-
-  public LocalDate convertToLocalDate(Date dateToConvert) {
+  public static LocalDate convertToLocalDate(Date dateToConvert) {
     return Instant.ofEpochMilli(dateToConvert.getTime())
             .atZone(ZoneId.systemDefault())
             .toLocalDate();
