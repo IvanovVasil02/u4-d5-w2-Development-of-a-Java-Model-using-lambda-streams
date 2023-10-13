@@ -1,5 +1,6 @@
 package vasilivanov.entities;
 
+import enums.Periodicity;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -9,8 +10,10 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.Long.parseLong;
 
@@ -91,16 +94,16 @@ public abstract class LibraryProduct {
                 current.pubblicationYear + "#" +
                 current.pagesNumber + "#" +
                 ((Book) current).getAuthor() + "#" +
-                ((Book) current).getGenre();
-        FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
+                ((Book) current).getGenre() + "#";
+        FileUtils.writeStringToFile(filePage, stringElement + "-!-", StandardCharsets.UTF_8, true);
       } else {
         String stringElement = "Magazine#" +
                 current.isbnCode + "#" +
                 current.title + "#" +
                 current.pubblicationYear + "#" +
                 current.pagesNumber + "#" +
-                ((Magazine) current).getPeriodicity();
-        FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
+                ((Magazine) current).getPeriodicity() + "#";
+        FileUtils.writeStringToFile(filePage, stringElement + "-!-", StandardCharsets.UTF_8, true);
       }
     }
   }
@@ -108,8 +111,8 @@ public abstract class LibraryProduct {
   public static void readArchive(File filePage, Map<String, LibraryProduct> archive) throws IOException, ParseException {
 
     String readFileTostring = FileUtils.readFileToString(filePage, "UTF-8");
-    String[] splitFile = readFileTostring.split("!");
-    for (int i = 0; i < splitFile.length; i++) {
+    String[] splitFile = readFileTostring.split("-!-");
+    for (int i = 0; i < splitFile.length - 1; i++) {
       String[] splitElement = splitFile[i].split("#");
 
       if (splitElement[1].equals("Book")) {
@@ -118,25 +121,18 @@ public abstract class LibraryProduct {
                   splitElement[2], getStrLocaleDate(splitElement[3]),
                   parseLong(splitElement[4]), splitElement[5], splitElement[6]));
         }
-      } else {
+      } else if (splitElement[1].equals("Magazine")) {
         for (int j = 0; j < splitElement.length; j++) {
-          archive.put(splitElement[1], new Book(splitElement[1],
-                  splitElement[2], getStrLocalDate(splitElement[3]),
-                  parseLong(splitElement[4]), splitElement[5], splitElement[6]));
+          archive.put(splitElement[1], new Magazine(splitElement[1],
+                  splitElement[2], getStrLocaleDate(splitElement[3]),
+                  parseLong(splitElement[4]), Periodicity.valueOf(splitElement[5])));
         }
       }
     }
   }
 
   public static LocalDate getStrLocaleDate(String dateString) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    return LocalDate.parse(dateString, formatter);
-  }
-
-  public static LocalDate getStrLocalDate(String dateString) throws ParseException {
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy", Locale.ENGLISH);
-    return LocalDate.parse(dateString, formatter);
+    return LocalDate.parse(dateString);
   }
 
   public static LocalDate convertToLocalDate(Date dateToConvert) {
