@@ -1,10 +1,13 @@
 package vasilivanov;
 
 import com.github.javafaker.Faker;
+import org.apache.commons.io.FileUtils;
 import vasilivanov.entities.Book;
 import vasilivanov.entities.LibraryProduct;
 import vasilivanov.entities.Magazine;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -19,6 +22,8 @@ public class Application {
 
     List<LibraryProduct> libraryCatalogue = new ArrayList<>();
     Faker f = new Faker(new Locale("ITALY"));
+
+    File file = new File("src/main/java/vasilivanov/UserArchive.txt");
 
     Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2020");
     Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2023");
@@ -98,9 +103,8 @@ public class Application {
               System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
             }
-
           case 5:
-            while (choice == 5) {
+            while (choice == 6) {
               System.out.println("Enter the author's name");
               String userDate = scanner.nextLine();
               getSearchedElementByAuthor(libraryCatalogue, userDate);
@@ -108,9 +112,22 @@ public class Application {
               System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
             }
+          case 6:
+            FileUtils.writeStringToFile(file, userArchive + System.lineSeparator(), StandardCharsets.UTF_8, true);
+
+            System.out.println("Archive saved!");
+            System.out.println("What do you want to do now");
+            choice = Integer.parseInt(scanner.nextLine());
+          case 7:
+            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            System.out.println(content);
+
+            System.out.println("What do you want to do now");
+            choice = Integer.parseInt(scanner.nextLine());
+
         }
       } catch (Exception ex) {
-        System.out.println("You have to enter a number");
+        System.out.println("error: " + ex);
       }
 
       break;
