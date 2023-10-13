@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class LibraryProduct {
   protected String isbnCode;
@@ -20,6 +22,18 @@ public abstract class LibraryProduct {
 
   public static long getRndm() {
     return Math.round(Math.random() * (400 - 100 + 1) + 100);
+  }
+
+  public static void addElement(List<LibraryProduct> catalogue, List<LibraryProduct> archive, String isbn) {
+    archive.addAll(catalogue.stream().
+            filter(product -> product.isbnCode.equals(isbn))
+            .toList());
+  }
+
+  public static void removeElement(List<LibraryProduct> archive, String isbn) {
+
+    Iterator<LibraryProduct> i = archive.iterator();
+
   }
 
   public String getIsbnCode() {
