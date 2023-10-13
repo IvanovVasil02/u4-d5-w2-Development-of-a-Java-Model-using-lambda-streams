@@ -35,7 +35,9 @@ public class Application {
       libraryCatalogue.add(bookSupplier.get());
       libraryCatalogue.add(magazineSupplier.get());
     }
-    List<LibraryProduct> userArchive = new ArrayList<>();
+
+    Map<String, LibraryProduct> userArchive = new HashMap<>();
+
     while (true) {
       Scanner scanner = new Scanner(System.in);
       System.out.println("Enter 0 to view the library catalog");
@@ -64,20 +66,50 @@ public class Application {
               System.out.println("enter the ISBN code of the book you want to add to your archive");
               isbn = scanner.nextLine();
               addElement(libraryCatalogue, userArchive, isbn);
-              userArchive.forEach(System.out::println);
+              userArchive.forEach((isbna, element) -> System.out.println(element));
+
               System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
             }
 
           case 2:
-            System.out.println("enter the ISBN code of the book you want to remove from your archive");
-            isbn = scanner.nextLine();
-            removeElement(userArchive, isbn);
-            userArchive.forEach(System.out::println);
-            System.out.println("What do you want to do now");
-            choice = Integer.parseInt(scanner.nextLine());
+            while (choice == 2) {
+              System.out.println("enter the ISBN code of the book you want to remove from your archive");
+              isbn = scanner.nextLine();
+              removeElement(userArchive, isbn);
+              userArchive.forEach((isbna, element) -> System.out.println(element));
+              choice = Integer.parseInt(scanner.nextLine());
+            }
+          case 3:
+            while (choice == 3) {
+              System.out.println("enter the ISBN code to search: ");
+              isbn = scanner.nextLine();
+              getSearchedElementByIsbn(libraryCatalogue, isbn);
+              userArchive.forEach((isbna, element) -> System.out.println(element));
+              choice = Integer.parseInt(scanner.nextLine());
+            }
+          case 4:
+            while (choice == 4) {
+              System.out.println("enter the pubblication date to search Books (dd/mm/yyyy)");
+              String userDate = scanner.nextLine();
+              getSearchedElementByDate(libraryCatalogue, userDate);
+              userArchive.forEach((isbna, element) -> System.out.println(element));
+
+              System.out.println("What do you want to do now");
+              choice = Integer.parseInt(scanner.nextLine());
+            }
+
+          case 5:
+            while (choice == 5) {
+              System.out.println("Enter the author's name");
+              String userDate = scanner.nextLine();
+              getSearchedElementByAuthor(libraryCatalogue, userDate);
+
+              System.out.println("What do you want to do now");
+              choice = Integer.parseInt(scanner.nextLine());
+            }
         }
-      } catch (NumberFormatException ex) {
+      } catch (Exception ex) {
         System.out.println("You have to enter a number");
       }
 
