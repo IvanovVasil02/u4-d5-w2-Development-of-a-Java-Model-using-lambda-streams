@@ -18,6 +18,10 @@ public class Book extends LibraryProduct {
     return author;
   }
 
+  public String getGenre() {
+    return genre;
+  }
+
   @Override
   public String toString() {
     return "Book{" +

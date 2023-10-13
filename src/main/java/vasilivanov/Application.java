@@ -1,13 +1,11 @@
 package vasilivanov;
 
 import com.github.javafaker.Faker;
-import org.apache.commons.io.FileUtils;
 import vasilivanov.entities.Book;
 import vasilivanov.entities.LibraryProduct;
 import vasilivanov.entities.Magazine;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -104,7 +102,7 @@ public class Application {
               choice = Integer.parseInt(scanner.nextLine());
             }
           case 5:
-            while (choice == 6) {
+            while (choice == 5) {
               System.out.println("Enter the author's name");
               String userDate = scanner.nextLine();
               getSearchedElementByAuthor(libraryCatalogue, userDate);
@@ -113,14 +111,16 @@ public class Application {
               choice = Integer.parseInt(scanner.nextLine());
             }
           case 6:
-            FileUtils.writeStringToFile(file, userArchive + System.lineSeparator(), StandardCharsets.UTF_8, true);
+            writeArchive(userArchive, file);
 
             System.out.println("Archive saved!");
             System.out.println("What do you want to do now");
             choice = Integer.parseInt(scanner.nextLine());
           case 7:
-            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            System.out.println(content);
+
+//            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+//            System.out.println(content);
+            readArchive(file, userArchive);
 
             System.out.println("What do you want to do now");
             choice = Integer.parseInt(scanner.nextLine());
@@ -129,8 +129,6 @@ public class Application {
       } catch (Exception ex) {
         System.out.println("error: " + ex);
       }
-
-      
     }
   }
 }

@@ -1,5 +1,10 @@
 package vasilivanov.entities;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -70,6 +75,46 @@ public abstract class LibraryProduct {
           System.out.println(current);
         }
       }
+    }
+  }
+
+  public static void writeArchive(Map<String, LibraryProduct> archive, File filePage) throws IOException {
+
+    Iterator<LibraryProduct> i = archive.values().iterator();
+
+    while (i.hasNext()) {
+      LibraryProduct current = i.next();
+      if (current instanceof Book) {
+
+        String stringElement =
+                current.isbnCode + "#" +
+                        current.title + "#" +
+                        current.pubblicationYear + "#" +
+                        current.pagesNumber + "#" +
+                        ((Book) current).getAuthor() + "#" +
+                        ((Book) current).getGenre();
+        FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
+      } else {
+        String stringElement =
+                current.isbnCode + "#" +
+                        current.title + "#" +
+                        current.pubblicationYear + "#" +
+                        current.pagesNumber + "#" +
+                        ((Magazine) current).getPeriodicity();
+        FileUtils.writeStringToFile(filePage, stringElement + " ! " + System.lineSeparator(), StandardCharsets.UTF_8, true);
+      }
+
+    }
+
+  }
+
+  public static void readArchive(File filePage, Map<String, LibraryProduct> archive) throws IOException {
+
+    String readFileTostring = FileUtils.readFileToString(filePage, "UTF-8");
+    String[] splitElement = readFileTostring.split("!");
+
+    for (int i = 0; i < splitElement.length; i++) {
+      
     }
   }
 
