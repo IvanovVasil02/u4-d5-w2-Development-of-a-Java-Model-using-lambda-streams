@@ -8,8 +8,8 @@ import java.util.Random;
 public class Magazine extends LibraryProduct {
   private Periodicity periodicity;
 
-  public Magazine(String isbnCode, String title, LocalDate pubblicationYear, long pagesNumber, Periodicity periodicity) {
-    super(isbnCode, title, pubblicationYear, pagesNumber);
+  public Magazine(String isbnCode, String title, LocalDate publicationYear, long pagesNumber, Periodicity periodicity) {
+    super(isbnCode, title, publicationYear, pagesNumber);
     this.periodicity = periodicity;
   }
 
@@ -32,7 +32,7 @@ public class Magazine extends LibraryProduct {
     return "Magazine{" +
             "isbnCode='" + isbnCode + '\'' +
             ", title='" + title + '\'' +
-            ", pubblicationYear='" + pubblicationYear + '\'' +
+            ", publicationYear='" + publicationYear + '\'' +
             ", pagesNumber='" + pagesNumber + '\'' +
             "periodicity=" + periodicity +
             '}';

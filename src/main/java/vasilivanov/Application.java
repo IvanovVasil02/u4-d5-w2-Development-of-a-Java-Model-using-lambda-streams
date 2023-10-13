@@ -64,12 +64,10 @@ public class Application {
             choice = Integer.parseInt(scanner.nextLine());
 
           case 1:
-
             while (choice == 1) {
               System.out.println("enter the ISBN code of the book you want to add to your archive");
               isbn = scanner.nextLine();
               addElement(libraryCatalogue, userArchive, isbn);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
 
               System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
@@ -88,7 +86,8 @@ public class Application {
               System.out.println("enter the ISBN code to search: ");
               isbn = scanner.nextLine();
               getSearchedElementByIsbn(libraryCatalogue, isbn);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
+
+              System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
             }
           case 4:
@@ -96,7 +95,6 @@ public class Application {
               System.out.println("enter the pubblication date to search Books (dd/mm/yyyy)");
               String userDate = scanner.nextLine();
               getSearchedElementByDate(libraryCatalogue, userDate);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
 
               System.out.println("What do you want to do now");
               choice = Integer.parseInt(scanner.nextLine());
@@ -113,23 +111,21 @@ public class Application {
           case 6:
             writeArchive(userArchive, file);
 
-            System.out.println("Archive saved!");
             System.out.println("What do you want to do now");
             choice = Integer.parseInt(scanner.nextLine());
           case 7:
-
-//            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-//            System.out.println(content);
             readArchive(file, userArchive);
-
             userArchive.forEach((isbna, element) -> System.out.println(element));
 
             System.out.println("What do you want to do now");
             choice = Integer.parseInt(scanner.nextLine());
+          default:
+            System.out.println("You need to enter one of the controls above");
+            choice = Integer.parseInt(scanner.nextLine());
 
         }
       } catch (Exception ex) {
-        System.out.println("error: " + ex);
+        System.out.println("you must enter one of the appropriate controls");
       }
     }
   }
