@@ -130,7 +130,7 @@ public class Application {
         System.out.println("error: " + ex);
       }
 
-      break;
+      
     }
   }
 }
