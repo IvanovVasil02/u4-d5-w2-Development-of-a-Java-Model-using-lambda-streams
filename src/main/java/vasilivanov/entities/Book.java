@@ -8,11 +8,12 @@ public class Book extends LibraryProduct {
   private String genre;
 
 
-  public Book(String isbnCode, String title, LocalDate pubblicationYear, long pagesNumber, String author, String genre) {
-    super(isbnCode, title, pubblicationYear, pagesNumber);
+  public Book(String isbnCode, String title, LocalDate publicationYear, long pagesNumber, String author, String genre) {
+    super(isbnCode, title, publicationYear, pagesNumber);
     this.author = author;
     this.genre = genre;
   }
+
 
   public String getAuthor() {
     return author;
@@ -27,7 +28,7 @@ public class Book extends LibraryProduct {
     return "Book{" +
             "isbnCode='" + isbnCode + '\'' +
             ", title='" + title + '\'' +
-            ", pubblicationYear='" + pubblicationYear + '\'' +
+            ", publicationYear='" + publicationYear + '\'' +
             ", pagesNumber='" + pagesNumber + '\'' +
             "author='" + author + '\'' +
             ", genre='" + genre + '\'' +

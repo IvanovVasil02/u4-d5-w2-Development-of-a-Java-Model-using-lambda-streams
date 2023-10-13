@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Supplier;
 
-import static vasilivanov.entities.LibraryProduct.*;
+import static vasilivanov.entities.ArchiveFunctions.*;
+import static vasilivanov.entities.LibraryProduct.convertToLocalDate;
 import static vasilivanov.entities.Magazine.randomPeriodicity;
 
 public class Application {
@@ -57,79 +58,63 @@ public class Application {
         String isbn;
 
         switch (choice) {
-
           case 0:
             libraryCatalogue.forEach(System.out::println);
             System.out.println("What do you want to do now");
-            choice = Integer.parseInt(scanner.nextLine());
+            break;
 
           case 1:
-
-            while (choice == 1) {
-              System.out.println("enter the ISBN code of the book you want to add to your archive");
-              isbn = scanner.nextLine();
-              addElement(libraryCatalogue, userArchive, isbn);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
-
-              System.out.println("What do you want to do now");
-              choice = Integer.parseInt(scanner.nextLine());
-            }
+            System.out.println("enter the ISBN code of the book you want to add to your archive");
+            isbn = scanner.nextLine();
+            addElement(libraryCatalogue, userArchive, isbn);
+            break;
 
           case 2:
-            while (choice == 2) {
-              System.out.println("enter the ISBN code of the book you want to remove from your archive");
-              isbn = scanner.nextLine();
-              removeElement(userArchive, isbn);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
-              choice = Integer.parseInt(scanner.nextLine());
-            }
+            System.out.println("enter the ISBN code of the book you want to remove from your archive");
+            isbn = scanner.nextLine();
+            removeElement(userArchive, isbn);
+            userArchive.forEach((isbna, element) -> System.out.println(element));
+            break;
+
           case 3:
-            while (choice == 3) {
-              System.out.println("enter the ISBN code to search: ");
-              isbn = scanner.nextLine();
-              getSearchedElementByIsbn(libraryCatalogue, isbn);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
-              choice = Integer.parseInt(scanner.nextLine());
-            }
+            System.out.println("enter the ISBN code to search: ");
+            isbn = scanner.nextLine();
+            getSearchedElementByIsbn(libraryCatalogue, isbn);
+            System.out.println("What do you want to do now");
+            break;
+
           case 4:
-            while (choice == 4) {
-              System.out.println("enter the pubblication date to search Books (dd/mm/yyyy)");
-              String userDate = scanner.nextLine();
-              getSearchedElementByDate(libraryCatalogue, userDate);
-              userArchive.forEach((isbna, element) -> System.out.println(element));
+            System.out.println("enter the pubblication date to search Books (dd/mm/yyyy)");
+            String date = scanner.nextLine();
+            getSearchedElementByDate(libraryCatalogue, date);
+            System.out.println("What do you want to do now");
+            break;
 
-              System.out.println("What do you want to do now");
-              choice = Integer.parseInt(scanner.nextLine());
-            }
           case 5:
-            while (choice == 5) {
-              System.out.println("Enter the author's name");
-              String userDate = scanner.nextLine();
-              getSearchedElementByAuthor(libraryCatalogue, userDate);
+            System.out.println("Enter the author's name");
+            String author = scanner.nextLine();
+            getSearchedElementByAuthor(libraryCatalogue, author);
+            System.out.println("What do you want to do now");
+            break;
 
-              System.out.println("What do you want to do now");
-              choice = Integer.parseInt(scanner.nextLine());
-            }
           case 6:
             writeArchive(userArchive, file);
-
-            System.out.println("Archive saved!");
             System.out.println("What do you want to do now");
-            choice = Integer.parseInt(scanner.nextLine());
+            break;
+
           case 7:
-
-//            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-//            System.out.println(content);
             readArchive(file, userArchive);
-
             userArchive.forEach((isbna, element) -> System.out.println(element));
-
             System.out.println("What do you want to do now");
-            choice = Integer.parseInt(scanner.nextLine());
+            break;
+
+          default:
+            System.out.println("You need to enter one of the controls above");
+            break;
 
         }
       } catch (Exception ex) {
-        System.out.println("error: " + ex);
+        System.out.println("you must enter one of the appropriate controls");
       }
     }
   }
