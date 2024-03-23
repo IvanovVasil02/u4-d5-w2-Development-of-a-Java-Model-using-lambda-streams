@@ -15,7 +15,6 @@ import java.util.Optional;
 import static java.lang.Long.parseLong;
 
 public class ArchiveFunctions {
-  //return random number for the number of the pages
   public static long getRndm() {
     return Math.round(Math.random() * (400 - 100 + 1) + 100);
   }
