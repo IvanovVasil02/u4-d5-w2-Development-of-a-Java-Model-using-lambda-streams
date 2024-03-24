@@ -1,4 +1,4 @@
-#Library Catalog Management System
+# Library Catalog Management System
 
 This Java application provides a comprehensive solution for managing a library catalog. It allows users to add, remove, and search for items such as books and magazines based on various criteria. The project leverages Java's Lambda expressions and Streams for efficient data processing and provides functionalities for saving and loading the catalog from disk.
 
